@@ -21,7 +21,7 @@ Inside of your project folder (after clone):
 ## Building and testing
 
 Run locally: 
-`npm run serve`
+`npm run dev`
 
 Build a production version:
 `npm run build`
