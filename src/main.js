@@ -1,48 +1,34 @@
-import "core-js/stable";
-import "regenerator-runtime/runtime";
-import Vue from 'vue';
+import './assets/main.css'
+
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import VueImg from 'v-img';
-import router from "./router";
-import { store } from './store/store'
-import App from './App.vue';
-import uswds from 'uswds';
-import browserDetect from 'vue-browser-detect-plugin';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VueUswds from "vue-uswds"
 import VueCarousel from 'vue-carousel';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+// arrow icons
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 // social icons
-import { faTwitterSquare } from '@fortawesome/free-brands-svg-icons'
-import { faFacebookSquare } from '@fortawesome/free-brands-svg-icons'
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
-import { faFlickr } from '@fortawesome/free-brands-svg-icons'
-import { faYoutubeSquare } from '@fortawesome/free-brands-svg-icons'
-import { faInstagram } from "@fortawesome/free-brands-svg-icons";
+import { faTwitterSquare, faFacebookSquare, faGithub, faFlickr, faYoutubeSquare, faInstagram } from "@fortawesome/free-brands-svg-icons";
 
-const vueImgConfig = {
-  altAsTitle: true
-}
+library.add(faTwitterSquare, faFacebookSquare, faGithub, faFlickr, faYoutubeSquare, faInstagram, faArrowLeft, faArrowRight);
 
-Vue.component('FontAwesomeIcon', FontAwesomeIcon);
-Vue.use(VueCarousel);
-Vue.use(VueImg, vueImgConfig)
+import App from './App.vue'
+import router from './router'
 
-// social icons
-library.add(faTwitterSquare);
-library.add(faFacebookSquare);
-library.add(faGithub);
-library.add(faFlickr);
-library.add(faYoutubeSquare);
-library.add(faInstagram);
+const app = createApp(App)
+const pinia = createPinia()
 
-Vue.use(uswds);
-Vue.use(browserDetect);
+app.use(pinia)
+app.use(VueUswds)
+app.use(router)
+app.use(VueCarousel)
+app.use(VueImg)
+app.component("FontAwesomeIcon", FontAwesomeIcon)
 
+app.mount('#app')
 
-const app = new Vue({
-    router,
-    store,
-    render: (h) => h(App),
-  }).$mount("#app");
-  
 
