@@ -29,10 +29,10 @@ import vizHeader from "@/assets/usgsHeaderAndFooter/viz-header.svg";
         name: 'Visualization',
         components: {
           vizHeader,
-          NavBar: () => import( /* webpackPrefetch: true */ /*webpackChunkName: "content-header"*/ "./../components/ContentHeader"),
-          About: () => import( /* webpackPrefetch: true */ /*webpackChunkName: "about"*/ "./../components/About"),
-          WhatsNew: () => import( /* webpackPrefetch: true */ /*webpackChunkName: "whats-new"*/ "./../components/WhatsNew"),
-          PortfolioAccordions: () => import( /* webpackPrefetch: true */ /*webpackChunkName: "portfolio-accordions"*/ "./../components/PortfolioAccordions")
+          NavBar: () => import("./../components/ContentHeader.vue"),
+          About: () => import("./../components/About.vue"),
+          WhatsNew: () => import("./../components/WhatsNew.vue"),
+          PortfolioAccordions: () => import("./../components/PortfolioAccordions.vue")
         },
         mounted(){
           const self = this;
