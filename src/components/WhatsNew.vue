@@ -152,7 +152,7 @@
         props: {
             title: {
                 type: String,
-                default: process.env.VUE_APP_TITLE
+                default: import.meta.env.VUE_APP_TITLE
             }
         },
         data() {
