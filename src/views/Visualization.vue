@@ -4,7 +4,7 @@
       <vizHeader id="viz-header-svg" />
     </section>
     <section id="viz-menu">
-      <NavBar id="sticky-header" />
+      <ContentHeader id="sticky-header" />
     </section>
     <div id="sticky-body">
       <section id="viz-new">
@@ -23,114 +23,99 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { onMounted, onUpdated, ref } from 'vue';
 import vizHeader from "@/assets/usgsHeaderAndFooter/viz-header.svg"; 
-    export default {
-        name: 'Visualization',
-        components: {
-          vizHeader,
-          NavBar: () => import("./../components/ContentHeader.vue"),
-          About: () => import("./../components/About.vue"),
-          WhatsNew: () => import("./../components/WhatsNew.vue"),
-          PortfolioAccordions: () => import("./../components/PortfolioAccordions.vue")
-        },
-        mounted(){
-          const self = this;
-          // sticky nav bar
-          window.onscroll = function() {stickyOnScroll()};
-          var header = document.getElementById("viz-menu");
-          var sticky = header.offsetTop;
-          // add/remove class based on scroll offset
-          function stickyOnScroll() {
-            if (window.pageYOffset > sticky) {
-              header.classList.add("sticky");
-            } else {
-              header.classList.remove("sticky");
-            }
-          }
-          //Wait for page to load then run this function
-          window.addEventListener("load", function(){
-            self.findCarouselContainers();
-          });
-        },
-        updated(){
-          this.lazyLoadImages();
-        },
-        methods: {
-          lazyLoadImages(){
-            const loadImg = function(entries, observer){
-              entries.forEach(entry => {
-                if(entry.isIntersecting){
-                  //Get first source element
-                  entry.target.srcset = entry.target.dataset.srcset; 
-                  //Get second source element
-                  entry.target.nextElementSibling.srcset = entry.target.dataset.srcset; 
-                  const findImg = entry.target.parentElement.querySelector("img");
-                  findImg.addEventListener('load', function () {
-                    entry.target.parentElement.classList.remove('lazy');
-                  });
-                  observer.unobserve(entry.target);
-                }
-              });
-            }
-            const imgTargets = document.querySelectorAll(".lazy > source");
-            const imgObserver = new window.IntersectionObserver(loadImg, {
-              //Watch entire viewport
-              root: null,
-              threshold: 0,
-              rootMargin: "300px"
-            })
-            imgTargets.forEach(img => {
-              imgObserver.observe(img)
-            });
-          },
-          findCarouselContainers(){
-            let self = this;
-            const carouselContainers = document.querySelectorAll(".carouselContainer");
-            carouselContainers.forEach(function(container){
-              container.addEventListener("click", self.addFooterCaption);
-            });
-          },
-          //Carousel full size image captions
-          addFooterCaption(e){
-            const self = this;
-            const imgContainer = document.querySelector(".fullscreen-v-img");
-            const title = document.querySelector(".title-v-img");
-            const img = document.querySelector(".content-v-img img");
-            
-            //Mutation observer
-            //If img src changes, update caption
-            const observer = new MutationObserver((changes) => {
-              changes.forEach(change => {
-                if(change.attributeName.includes('src')){
-                  self.switchCaptionText(title);
-                }
-              })
-            })
-            //Telling observer what to observe
-            observer.observe(img, {attributes: true});
-            
-            if(e.target.classList.contains("sliderImage")){
-              const captionHTML = `
-                <div id="captionArea">
-                  <div class="caption">
-                    ${title.textContent}
-                  </div>
-                </div>`;
-              imgContainer.insertAdjacentHTML("afterbegin", captionHTML);
-            }
+import ContentHeader from '@/components/ContentHeader.vue';
+import About from '@/components/About.vue';
+import WhatsNew from '@/components/WhatsNew.vue';
+import PortfolioAccordions from '@/components/PortfolioAccordions.vue';
 
-            // Override some default styling on the lightbox
-            img.style.maxHeight = "68vh"; // set height
-            img.style.top = "-15vh"; // move up
-          },
-          switchCaptionText(text){
-            const caption = document.querySelector(".caption");
-            caption.innerHTML = text.textContent;
-          }
-        }
+const header = ref(null);
+const sticky = ref(0);
 
-    }
+// sticky nav bar
+const stickyOnScroll = () => {
+  if (window.pageYOffset > sticky.value) {
+    header.value.classList.add("sticky");
+  } else {
+    header.value.classList.remove("sticky");
+  }
+};
+
+onMounted(() => {
+  window.onscroll = stickyOnScroll;
+  header.value = document.getElementById("viz-menu");
+  sticky.value = header.value.offsetTop;
+  // Initialize any other mounted logic here
+  findCarouselContainers();
+});
+
+onUpdated(() => {
+  // Implement logic that needs to run after every update
+  lazyLoadImages();
+});
+   
+
+const lazyLoadImages = () => {
+  const loadImg = (entries, observer) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.srcset = entry.target.dataset.srcset; 
+        entry.target.nextElementSibling.srcset = entry.target.dataset.srcset;
+        const findImg = entry.target.parentElement.querySelector("img");
+        findImg.onload = () => {
+          entry.target.parentElement.classList.remove('lazy');
+        };
+        observer.unobserve(entry.target);
+      }
+    });
+  }
+  const imgTargets = document.querySelectorAll(".lazy > source");
+  const imgObserver = new IntersectionObserver(loadImg, {
+    root: null,
+    threshold: 0,
+    rootMargin: "300px"
+  });
+  imgTargets.forEach(img => {
+    imgObserver.observe(img);
+  });
+};
+
+const findCarouselContainers = () => {
+  const carouselContainers = document.querySelectorAll(".carouselContainer");
+  carouselContainers.forEach(container => {
+    container.addEventListener("click", addFooterCaption);
+  });
+};
+
+const addFooterCaption = (e) => {
+  const imgContainer = document.querySelector(".fullscreen-v-img");
+  const title = document.querySelector(".title-v-img");
+  const img = document.querySelector(".content-v-img img");
+
+  const observer = new MutationObserver((changes) => {
+    changes.forEach(change => {
+      if(change.attributeName.includes('src')){
+        switchCaptionText(title);
+      }
+    });
+  });
+  observer.observe(img, {attributes: true});
+
+  if(e.target.classList.contains("sliderImage")){
+    const captionHTML = `<div id="captionArea"><div class="caption">${title.textContent}</div></div>`;
+    imgContainer.insertAdjacentHTML("afterbegin", captionHTML);
+  }
+
+  img.style.maxHeight = "68vh";
+  img.style.top = "-15vh";
+};
+
+const switchCaptionText = (text) => {
+  const caption = document.querySelector(".caption");
+  caption.innerHTML = text.textContent;
+};
 </script>
 
 <style scoped lang="scss">

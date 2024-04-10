@@ -147,8 +147,7 @@
     export default {
         name: 'WhatsNew',
         components: {
-           // RiverConditions: () => import( /* webpackPrefetch: true */ /*webpackChunkName: "river-conditions"*/ "../components/RiverConditions"),
-        },
+                  },
         props: {
             title: {
                 type: String,
@@ -157,7 +156,7 @@
         },
         data() {
           return {
-            publicPath: process.env.BASE_URL, 
+            publicPath: import.meta.env.BASE_URL, 
           }
         }
         

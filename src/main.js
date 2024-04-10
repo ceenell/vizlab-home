@@ -26,7 +26,6 @@ app.use(pinia)
 app.use(VueUswds)
 app.use(router)
 app.use(VueCarousel)
-app.use(VueImg)
 app.component("FontAwesomeIcon", FontAwesomeIcon)
 
 app.mount('#app')

@@ -171,7 +171,7 @@
         },
         data() {
           return {
-            publicPath: process.env.BASE_URL, // allows app to find the files when on different deployment roots
+            publicPath: import.meta.env.BASE_URL, // allows app to find the files when on different deployment roots
             d3: null,
 
             vizList_events: null,
