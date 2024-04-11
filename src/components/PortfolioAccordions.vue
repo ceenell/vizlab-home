@@ -28,7 +28,7 @@
           Interactives
         </button>
       </h3>
-      <div
+<!--       <div
         id="m-a1"
         class="usa-accordion__content usa-prose"
       >
@@ -46,7 +46,7 @@
             />
           </ul>
         </div>
-      </div>
+      </div> -->
 
 
       <!-- Use the accurate heading level to maintain the document outline -->
@@ -81,13 +81,13 @@
           style="font-style: italic; font-size: 0.9em"
         >View Code<span class="arrow">&#8594;</span></a> 
         </h4>
-        <RiverConditionsCarousel />
+       <!--  <RiverConditionsCarousel /> -->
         <h4
           id="head-streamflow"
         >
           Monthly Streamflow
         </h4>
-        <FlowTilesCarousel/>
+        <!-- <FlowTilesCarousel/> -->
         <h4
           id="head-chart-challenge"
         >

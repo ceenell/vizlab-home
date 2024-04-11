@@ -23,6 +23,7 @@
     "vue-carousel": "^0.18.0",
     "vue-router": "^4.2.5",
     "vue-uswds": "^1.3.0",
+    "vue3-carousel": "^0.3.3",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
